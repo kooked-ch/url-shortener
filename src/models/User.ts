@@ -21,4 +21,4 @@ const userSchema = new mongoose.Schema<IUser>({
 	verified: { type: Boolean, required: true, default: false },
 });
 
-export const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
+export const UserModel = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
