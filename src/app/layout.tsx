@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import './globals.css';
+import '@/styles/globals.css';
 
 const fontHeading = Inter({
 	subsets: ['latin'],
