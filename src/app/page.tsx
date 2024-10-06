@@ -3,15 +3,22 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Copy, Share, UserRound } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function MainPage() {
-	const baseUrl = new URL(window.location.href);
+	const [baseUrl, setBaseUrl] = useState<string>('');
 	const [longUrl, setLongUrl] = useState<string>('');
 	const [shortUrl, setShortUrl] = useState<string>('');
 	const [shortenedUrls, setShortenedUrls] = useState<string[]>([]);
 	const [longUrlError, setLongUrlError] = useState<string>('');
 	const [shortUrlError, setShortUrlError] = useState<string>('');
+
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			const url = new URL(window.location.href);
+			setBaseUrl(url.host);
+		}
+	}, []);
 
 	const handleLongUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setLongUrl(e.target.value);
@@ -58,7 +65,7 @@ export default function MainPage() {
 		if (response.ok) {
 			const data = await response.json();
 			console.log(data);
-			setShortenedUrls([...shortenedUrls, baseUrl.host + '/' + shortUrl]);
+			setShortenedUrls([...shortenedUrls, baseUrl + '/' + shortUrl]);
 			setLongUrl('');
 			setShortUrl('');
 		}
@@ -78,7 +85,7 @@ export default function MainPage() {
 					</div>
 					<div>
 						<div className="flex items-center">
-							<p className="mr-2">{baseUrl.host}/</p>
+							<p className="mr-2">{baseUrl}/</p>
 							<Input value={shortUrl} onChange={handleShortUrlChange} type="text" className={`px-4 py-3 bg-background rounded-md border ${shortUrlError ? 'border-red-500' : 'border-input'} text-foreground focus:border-primary focus:ring-1 focus:ring-primary-foreground`} />
 						</div>
 						{shortUrlError && <span className="text-red-500 text-sm">{shortUrlError}</span>}
