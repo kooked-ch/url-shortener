@@ -35,3 +35,20 @@ export async function createRedirect(longUrl: string, shortUrl: string): Promise
 		status: 201,
 	};
 }
+
+export async function getRedirect(slug: string): Promise<string | ErrorType> {
+	await db.connect();
+
+	const redirect = await RedirectModel.findOne({
+		slug,
+	});
+
+	if (!redirect) {
+		return {
+			error: 'Redirect not found',
+			status: 404,
+		};
+	}
+
+	return redirect.url;
+}
