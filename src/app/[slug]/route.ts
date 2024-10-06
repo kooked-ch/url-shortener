@@ -1,14 +1,15 @@
+'use server';
 import { getRedirect } from '@/lib/redirect';
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
+import NotFound from '../not-found';
 
-export default async function RedirectPage(req: { params: { slug: string } }) {
-	const { slug } = req.params;
-
-	const redirect = await getRedirect(slug);
+export async function GET(req: NextRequest) {
+	const url = new URL(req.url).pathname.replace('/', '');
+	const redirect = await getRedirect(url);
 
 	if (!redirect || typeof redirect !== 'string') {
-		return NextResponse.redirect('/404');
+		return NextResponse.redirect(process.env.NEXTAUTH_URL + '/not-found');
 	}
 
-	return NextResponse.redirect(redirect);
+	return NextResponse.redirect(redirect, { status: 302 });
 }
