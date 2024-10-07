@@ -3,6 +3,7 @@ import db from './mongo';
 import { IRedirect, RedirectModel } from '@/models/Redirect';
 import { LogModel } from '@/models/Logs';
 import { UserModel } from '@/models/User';
+import { alertNewRedirect } from './telegram';
 
 export async function createRedirect(longUrl: string, shortUrl: string, email: string): Promise<ErrorType> {
 	await db.connect();
@@ -48,6 +49,8 @@ export async function createRedirect(longUrl: string, shortUrl: string, email: s
 			status: 500,
 		};
 	}
+
+	alertNewRedirect(shortUrl, longUrl, user);
 
 	return {
 		error: '',
