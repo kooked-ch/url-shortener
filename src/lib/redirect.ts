@@ -1,6 +1,6 @@
 import { ErrorType } from '@/types/error';
 import db from './mongo';
-import { RedirectModel } from '@/models/Redirect';
+import { IRedirect, RedirectModel } from '@/models/Redirect';
 import { LogModel } from '@/models/Logs';
 import { UserModel } from '@/models/User';
 
@@ -74,4 +74,26 @@ export async function getRedirect(slug: string): Promise<string | ErrorType> {
 	}
 
 	return redirect.url;
+}
+
+export async function getRedirects(email: string): Promise<{ slug: string; url: string; count: number }[]> {
+	await db.connect();
+
+	const user = await UserModel.findOne({ email });
+
+	if (!user) {
+		return [];
+	}
+
+	const redirects = await RedirectModel.find({ user: user._id });
+
+	const resolvedRedirects = await Promise.all(
+		redirects.map(async (redirect: IRedirect) => ({
+			slug: redirect.slug,
+			url: redirect.url,
+			count: await LogModel.countDocuments({ url: redirect._id.toString() }),
+		}))
+	);
+
+	return resolvedRedirects;
 }
