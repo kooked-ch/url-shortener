@@ -3,6 +3,8 @@ import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
 
 const fontHeading = Inter({
 	subsets: ['latin'],
@@ -16,13 +18,16 @@ const fontBody = Inter({
 	variable: '--font-body',
 });
 
-export default function RootLayout({
-	children,
-}: Readonly<{
+type RootLayoutProps = {
 	children: React.ReactNode;
-}>) {
+	session: Session | null;
+};
+
+export default function RootLayout(props: RootLayoutProps) {
+	const { children, session } = props;
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
+			<head />
 			<body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>
 				<Header />
 				{children}
