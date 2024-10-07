@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createRedirect } from '@/lib/redirect';
+import { getServerSession, Session } from 'next-auth';
 
 export async function POST(req: Request) {
 	const { longUrl, shortUrl } = await req.json();
@@ -8,7 +9,9 @@ export async function POST(req: Request) {
 		return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
 	}
 
-	const redirect = await createRedirect(longUrl, shortUrl);
+	const session: Session | null = await getServerSession();
+
+	const redirect = await createRedirect(longUrl, shortUrl, session?.user?.email || '');
 
 	if (redirect.error) {
 		return NextResponse.json({ error: redirect.error }, { status: redirect.status });
