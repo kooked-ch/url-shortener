@@ -8,8 +8,6 @@ export async function POST(req: Request) {
 		return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
 	}
 
-	console.log(longUrl, shortUrl);
-
 	const redirect = await createRedirect(longUrl, shortUrl);
 
 	if (redirect.error) {
