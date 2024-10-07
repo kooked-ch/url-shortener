@@ -1,6 +1,8 @@
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
+import { Footer } from '@/components/footer';
+import { Header } from '@/components/header';
 
 const fontHeading = Inter({
 	subsets: ['latin'],
@@ -21,7 +23,11 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>{children}</body>
+			<body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>
+				<Header />
+				{children}
+				<Footer />
+			</body>
 		</html>
 	);
 }
