@@ -1,8 +1,10 @@
 import { ErrorType } from '@/types/error';
 import db from './mongo';
 import { RedirectModel } from '@/models/Redirect';
+import { LogModel } from '@/models/Logs';
+import { UserModel } from '@/models/User';
 
-export async function createRedirect(longUrl: string, shortUrl: string): Promise<ErrorType> {
+export async function createRedirect(longUrl: string, shortUrl: string, email: string): Promise<ErrorType> {
 	await db.connect();
 
 	// Check if short URL already exists
@@ -17,11 +19,28 @@ export async function createRedirect(longUrl: string, shortUrl: string): Promise
 		};
 	}
 
-	// Create new redirect
-	const redirect = await RedirectModel.create({
+	const user = await UserModel.findOne({
+		email,
+	});
+
+	let createObject: {
+		slug: string;
+		url: string;
+		user?: string;
+	} = {
 		slug: shortUrl,
 		url: longUrl,
-	});
+	};
+
+	if (user) {
+		createObject = {
+			...createObject,
+			user: user._id,
+		};
+	}
+
+	// Create new redirect
+	const redirect = await RedirectModel.create(createObject);
 
 	if (!redirect) {
 		return {
@@ -41,6 +60,10 @@ export async function getRedirect(slug: string): Promise<string | ErrorType> {
 
 	const redirect = await RedirectModel.findOne({
 		slug,
+	});
+
+	await LogModel.create({
+		url: redirect._id.toString(),
 	});
 
 	if (!redirect) {
