@@ -4,8 +4,11 @@ export function ShortList({ items }: { items: { url: string; slug: string; count
 			<h1 className="text-3xl font-black text-center mb-2">Shorted URL</h1>
 			{items.map((item, index) => (
 				<div className="bg-muted rounded-md p-4 flex items-center justify-between" key={'short' + index}>
-					<div className="text-foreground font-medium">{item.slug}</div>
-					<div className="flex items-center gap-2">{item.count}</div>
+					<div>
+						<div className="text-foreground font-medium">{item.slug}</div>
+						<div className="text-muted-foreground text-sm">{item.url}</div>
+					</div>
+					<div className="flex items-center gap-2 text-lg">{item.count}</div>
 				</div>
 			))}
 		</div>
