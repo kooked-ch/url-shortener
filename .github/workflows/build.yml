@@ -40,6 +40,9 @@ jobs:
                   echo "Latest release: $latest_release"
                   echo "latest_release=$latest_release" >> $GITHUB_ENV
 
+            - name: echo tag
+              run: echo ${{ env.latest_release }}
+
             # Extract metadata for Docker
             - name: Extract Docker metadata
               id: meta
