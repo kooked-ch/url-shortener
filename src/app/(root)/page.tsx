@@ -1,10 +1,10 @@
 'use server';
 
-import { Link } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { UrlShortener } from '@/components/url-shortener';
 import { Header } from '@/components/header';
 import { Features } from '@/components/features';
+import { Footer } from '@/components/footer';
 
 export default async function MainPage() {
 	const session = await getServerSession();
@@ -13,8 +13,9 @@ export default async function MainPage() {
 	return (
 		<div className="w-full px-4 py-12 space-y-16">
 			<Header />
-			<UrlShortener baseUrl={new URL(baseUrl).host} />
+			<UrlShortener baseUrl={new URL(baseUrl).host} session={session} />
 			<Features />
+			<Footer />
 		</div>
 	);
 }
