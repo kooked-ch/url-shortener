@@ -4,6 +4,7 @@ import { IRedirect, RedirectModel } from '@/models/Redirect';
 import { LogModel } from '@/models/Logs';
 import { UserModel } from '@/models/User';
 import { alertNewRedirect } from './telegram';
+import { urlsType } from '@/types/url';
 
 export async function createRedirect(longUrl: string, shortUrl: string, email: string): Promise<ErrorType> {
 	await db.connect();
@@ -79,7 +80,7 @@ export async function getRedirect(slug: string): Promise<string | ErrorType> {
 	return redirect.url;
 }
 
-export async function getRedirects(email: string): Promise<{ slug: string; url: string; count: number }[]> {
+export async function getRedirects(email: string): Promise<urlsType[]> {
 	await db.connect();
 
 	const user = await UserModel.findOne({ email });
@@ -88,13 +89,15 @@ export async function getRedirects(email: string): Promise<{ slug: string; url: 
 		return [];
 	}
 
-	const redirects = await RedirectModel.find({ user: user._id });
+	const redirects = user.role === 'admin' ? await RedirectModel.find() : await RedirectModel.find({ user: user._id });
 
 	const resolvedRedirects = await Promise.all(
 		redirects.map(async (redirect: IRedirect) => ({
-			slug: redirect.slug,
-			url: redirect.url,
-			count: await LogModel.countDocuments({ url: redirect._id.toString() }),
+			id: redirect._id.toString(),
+			longUrl: redirect.url,
+			shortUrl: redirect.slug,
+			creationDate: redirect.creationDate,
+			hits: await LogModel.countDocuments({ url: redirect._id.toString() }),
 		}))
 	);
 
