@@ -59,25 +59,27 @@ export async function createRedirect(longUrl: string, shortUrl: string, email: s
 	};
 }
 
-export async function getRedirect(slug: string): Promise<string | ErrorType> {
-	await db.connect();
+export async function getRedirect(slug: string): Promise<string | null> {
+	try {
+		await db.connect();
 
-	const redirect = await RedirectModel.findOne({
-		slug,
-	});
+		const redirect = await RedirectModel.findOne({
+			slug,
+		});
 
-	await LogModel.create({
-		url: redirect._id.toString(),
-	});
+		await LogModel.create({
+			url: redirect._id.toString(),
+		});
 
-	if (!redirect) {
-		return {
-			error: 'Redirect not found',
-			status: 404,
-		};
+		if (!redirect) {
+			return null;
+		}
+
+		return redirect.url;
+	} catch (error) {
+		console.error('Error getting redirect:', error);
+		null;
 	}
-
-	return redirect.url;
 }
 
 export async function getRedirects(email: string): Promise<urlsType[]> {
