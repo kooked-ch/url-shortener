@@ -1,32 +1,29 @@
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
-import { Footer } from '@/components/footer';
-import { Header } from '@/components/header';
+import { SessionProvider } from '@/components/sessionProvider';
+import { ThemeProvider } from 'next-themes';
 
-const fontHeading = Inter({
-	subsets: ['latin'],
-	display: 'swap',
-	variable: '--font-heading',
-});
+import React from 'react';
 
-const fontBody = Inter({
-	subsets: ['latin'],
-	display: 'swap',
-	variable: '--font-body',
-});
+const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
-	children,
-}: Readonly<{
-	children: React.ReactNode;
-}>) {
+export const metadata: Metadata = {
+	title: 'Url Shortener',
+	description: 'A simple url shortener',
+};
+
+type RootLayoutProps = any;
+
+export default function RootLayout(props: RootLayoutProps) {
+	const { children, session } = props;
 	return (
-		<html lang="en">
-			<body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>
-				<Header />
-				{children}
-				<Footer />
+		<html lang="en" suppressHydrationWarning>
+			<head />
+			<body className={inter.className}>
+				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+					<SessionProvider session={session}>{children}</SessionProvider>
+				</ThemeProvider>
 			</body>
 		</html>
 	);
