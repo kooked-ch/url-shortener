@@ -147,3 +147,37 @@ export async function updateRedirect(id: string, longUrl: string, email: string)
 		};
 	}
 }
+
+export async function deleteRedirect(id: string, email: string): Promise<ErrorType> {
+	try {
+		await db.connect();
+
+		const user = await UserModel.findOne({ email });
+
+		if (!user) {
+			return {
+				error: 'User not found',
+				status: 404,
+			};
+		}
+
+		const query: Record<string, any> = { _id: id };
+		if (user.role !== 'admin') {
+			query.user = user._id;
+		}
+
+		await RedirectModel.deleteOne(query);
+
+		return {
+			error: '',
+			status: 200,
+		};
+	} catch (error) {
+		console.error('Error delete redirect:', error);
+
+		return {
+			error: 'An internal error occurred',
+			status: 500,
+		};
+	}
+}
