@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Copy, Share } from 'lucide-react';
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Session } from 'next-auth';
+import { Separator } from '@/components/ui/separator';
 
-export function UrlShortener({ baseUrl }: { baseUrl: string }) {
+export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: Session | null }) {
 	const [longUrl, setLongUrl] = useState<string>('');
 	const [shortUrl, setShortUrl] = useState<string>('');
 	const [shortenedUrls, setShortenedUrls] = useState<string[]>([]);
@@ -47,6 +49,10 @@ export function UrlShortener({ baseUrl }: { baseUrl: string }) {
 		}
 	};
 
+	const copyToClipboard = (url: string) => {
+		navigator.clipboard.writeText(url);
+	};
+
 	return (
 		<div className="flex items-center justify-center">
 			<Card className="w-full max-w-2xl mx-auto">
@@ -66,27 +72,26 @@ export function UrlShortener({ baseUrl }: { baseUrl: string }) {
 						<Button onClick={createRedirect} className="w-full bg-primary text-primary-foreground h-12">
 							Shorten URL
 						</Button>
+						{session && shortenedUrls.length > 0 && (
+							<>
+								<Separator className="my-3" />
+								<div className="mt-6 space-y-3">
+									{shortenedUrls.map((url, index) => (
+										<div key={index} className="flex items-center justify-between bg-muted p-3 rounded-md">
+											<span className="text-sm font-medium">{url}</span>
+											<div className="flex gap-2">
+												<Button variant="ghost" size="icon" onClick={() => copyToClipboard(url)}>
+													<Copy className="w-5 h-5" />
+												</Button>
+											</div>
+										</div>
+									))}
+								</div>
+							</>
+						)}
 					</div>
 				</CardContent>
 			</Card>
-			{/* Shortened URLs */}
-			{shortenedUrls.length > 0 && (
-				<div className="mt-6 space-y-3">
-					{shortenedUrls.map((url, index) => (
-						<div key={index} className="flex items-center justify-between bg-muted p-3 rounded-md">
-							<span className="text-sm font-medium">{url}</span>
-							<div className="flex gap-2">
-								<Button variant="ghost" size="icon">
-									<Copy className="w-5 h-5" />
-								</Button>
-								<Button variant="ghost" size="icon">
-									<Share className="w-5 h-5" />
-								</Button>
-							</div>
-						</div>
-					))}
-				</div>
-			)}
 		</div>
 	);
 }
