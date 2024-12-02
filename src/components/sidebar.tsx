@@ -2,7 +2,7 @@
 import { Home, List, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 import { Button } from './ui/button';
@@ -48,7 +48,11 @@ const NavigationMenu = ({ pathname, isCollapsed = false }: { pathname: string; i
 
 export function Sidebar({ session }: { session: Session | null }) {
 	const pathname = usePathname();
-	const [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(false);
+
+	useEffect(() => {
+		localStorage.setItem('isOpen', isOpen.toString());
+	}, [isOpen]);
 
 	return (
 		<>
@@ -76,7 +80,7 @@ export function Sidebar({ session }: { session: Session | null }) {
 			</Sheet>
 
 			{/* Desktop Sidebar */}
-			<div className={cn('hidden lg:flex min-h-screen flex-col border-r bg-card transition-all duration-300 absolute', isOpen ? 'w-64' : 'w-20')}>
+			<div className={cn('hidden lg:flex min-h-screen flex-col border-r bg-card relative', isOpen ? 'w-64' : 'w-20')}>
 				<Button variant="ghost" size="icon" className="absolute top-4 -right-4 h-8 w-8 rounded-full border bg-background" onClick={() => setIsOpen(!isOpen)}>
 					{isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
 				</Button>
