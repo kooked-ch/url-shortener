@@ -1,13 +1,13 @@
-name: Docker
+name: Build Front Docker image
 
 on:
     push:
-        branches: ['main']
-        tags: ['v*.*.*']
+        branches:
+            - main
 
 env:
     REGISTRY: ghcr.io
-    IMAGE_NAME: ${{ github.repository }}
+    REPOSITORY: ${{ github.repository }}
 
 jobs:
     build:
@@ -20,9 +20,11 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            # Set up BuildKit Docker container builder
+            # Set up BuildKit Docker container builder with multi-platform support
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
+              with:
+                  install: true
 
             # Login to GitHub Container Registry
             - name: Log into registry ${{ env.REGISTRY }}
@@ -32,32 +34,35 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            # Get latest release to use as tag
-            - name: Get Latest Release
-              id: get_release
+            # Get version from frontend/package.json
+            - name: Get Version from frontend/package.json
+              id: get_version
               run: |
-                  latest_release=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .name)
-                  echo "Latest release: $latest_release"
-                  echo "latest_release=$latest_release" >> $GITHUB_ENV
+                  version=$(jq -r .version package.json)
+                  echo "Version from package.json: $version"
+                  echo "version=$version" >> $GITHUB_ENV
 
-            - name: echo tag
-              run: echo ${{ env.latest_release }}
+            # Echo the version to verify it's set correctly
+            - name: Echo version
+              run: echo "Building ${{ env.REGISTRY }}/${{ env.REPOSITORY }}, version ${{ env.version }}"
 
             # Extract metadata for Docker
             - name: Extract Docker metadata
               id: meta
               uses: docker/metadata-action@v5
               with:
-                  images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-                  tags: ${{ env.latest_release }},latest
+                  images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
+                  tags: |
+                      latest,
+                      ${{ env.version }}
 
-            # Build and push Docker image
+            # Build and push Docker image for multiple platforms (amd64 and arm64)
             - name: Build and push Docker image
               uses: docker/build-push-action@v5
               with:
                   context: .
                   push: true
-                  tags: ${{ steps.meta.outputs.tags }}
+                  tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest,${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.version }}
                   labels: ${{ steps.meta.outputs.labels }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
