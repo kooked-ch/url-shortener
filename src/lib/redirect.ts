@@ -78,7 +78,7 @@ export async function getRedirect(slug: string): Promise<string | null> {
 		return redirect.url;
 	} catch (error) {
 		console.error('Error getting redirect:', error);
-		null;
+		return null;
 	}
 }
 
