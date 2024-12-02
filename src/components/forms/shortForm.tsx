@@ -6,7 +6,7 @@ import { Copy, LogOut, Share, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { Session } from 'next-auth';
 
-export default function ShortForm({ baseUrl, session }: { baseUrl: string; session: Session | null }) {
+export default function ShortForm({ baseUrl }: { baseUrl: string }) {
 	const [longUrl, setLongUrl] = useState<string>('');
 	const [shortUrl, setShortUrl] = useState<string>('');
 	const [shortenedUrls, setShortenedUrls] = useState<string[]>([]);
