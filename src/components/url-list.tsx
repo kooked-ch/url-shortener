@@ -14,7 +14,6 @@ export function UrlList({ urls }: { urls: urlsType[] }) {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage, setItemsPerPage] = useState(10);
 	const [loading, setLoading] = useState(true);
-	const [isOpen, setIsOpen] = useState(false);
 	const [sortConfig, setSortConfig] = useState<{
 		key: keyof (typeof urls)[0];
 		direction: 'asc' | 'desc';
@@ -81,7 +80,7 @@ export function UrlList({ urls }: { urls: urlsType[] }) {
 
 	return (
 		<div className="w-full flex justify-end">
-			<div className={cn(isOpen ? 'w-[calc(100vw-16rem)]' : 'w-[calc(100vw-5rem)]', 'px-8 py-6 space-y-4')}>
+			<div className="w-full px-8 py-6 space-y-4">
 				<h1 className="text-3xl font-bold">URL List</h1>
 				<div className="relative">
 					<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
