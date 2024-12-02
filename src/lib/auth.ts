@@ -39,7 +39,6 @@ export const authOptions: NextAuthOptions = {
 					id: user._id.toString(),
 					name: user.name,
 					email: user.email,
-					isTwoFactorComplete: false,
 				};
 			},
 		}),
@@ -68,6 +67,7 @@ export const authOptions: NextAuthOptions = {
 					username: profile?.name || (profile as any)?.login || null,
 					image: user.image || profile?.image || null,
 					provider: provider,
+					role: 'user',
 					name: profile?.name || user.name || (profile as any)?.login || null,
 					verified: provider === 'google' || provider === 'github' ? true : false,
 				});
