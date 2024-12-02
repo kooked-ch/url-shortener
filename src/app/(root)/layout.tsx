@@ -5,8 +5,9 @@ import React, { ReactNode } from 'react';
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
 	const session: Session | null = await getServerSession();
+
 	return (
-		<main className="bg-background">
+		<main className="bg-background flex">
 			{session && <Sidebar session={session} />}
 			{children}
 		</main>
