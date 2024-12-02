@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
-import { SessionProvider } from '@/components/sessionProvider';
 import { ThemeProvider } from 'next-themes';
 
 import React from 'react';
@@ -22,7 +21,7 @@ export default function RootLayout(props: RootLayoutProps) {
 			<head />
 			<body className={inter.className}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-					<SessionProvider session={session}>{children}</SessionProvider>
+					{children}
 				</ThemeProvider>
 			</body>
 		</html>
