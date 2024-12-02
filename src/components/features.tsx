@@ -25,8 +25,10 @@ export function Features() {
 			{features.map((feature) => (
 				<Card key={feature.title} className="border-2">
 					<CardHeader className="space-y-1">
-						<feature.icon className="h-8 w-8 text-emerald-500" />
-						<CardTitle className="text-xl">{feature.title}</CardTitle>
+						<CardTitle className="text-xl flex gap-2">
+							<feature.icon className="h-8 w-8 text-emerald-500" />
+							{feature.title}
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<p className="text-gray-600">{feature.description}</p>
