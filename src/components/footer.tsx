@@ -6,17 +6,8 @@ export async function Footer() {
 	const session = await getServerSession();
 
 	return (
-		<footer className="absolute justify-center w-full flex bottom-1 text-muted-foreground opacity-50 select-none">
-			{session ? (
-				<div className="flex items-center gap-1 capitalize">
-					<UserRound className="w-4 h-4" />
-					<p>{session?.user?.name || ''}</p>·
-					<Link href="/logout" className="flex items-center gap-1">
-						<LogOut className="w-4 h-4" />
-						Sign out
-					</Link>
-				</div>
-			) : (
+		<footer className="absolute justify-center w-[calc(100%-2rem)] flex bottom-1 text-muted-foreground opacity-50 select-none">
+			{!session && (
 				<Link href="/login" className="flex items-center gap-1">
 					<UserRound className="w-4 h-4" />
 					<p>Login</p>
