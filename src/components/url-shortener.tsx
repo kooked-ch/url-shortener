@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Copy, Share } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Session } from 'next-auth';
@@ -14,6 +14,7 @@ export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: S
 	const [shortenedUrls, setShortenedUrls] = useState<string[]>([]);
 	const [longUrlError, setLongUrlError] = useState<string>('');
 	const [shortUrlError, setShortUrlError] = useState<string>('');
+	const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
 	const handleLongUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setLongUrl(e.target.value);
@@ -49,8 +50,11 @@ export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: S
 		}
 	};
 
-	const copyToClipboard = (url: string) => {
+	const copyToClipboard = (url: string, index: number) => {
 		navigator.clipboard.writeText(url);
+		setCopiedIndex(index);
+
+		setTimeout(() => setCopiedIndex(null), 3000);
 	};
 
 	return (
@@ -80,9 +84,15 @@ export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: S
 										<div key={index} className="flex items-center justify-between bg-muted p-3 rounded-md">
 											<span className="text-sm font-medium">{url}</span>
 											<div className="flex gap-2">
-												<Button variant="ghost" size="icon" onClick={() => copyToClipboard(url)}>
-													<Copy className="w-5 h-5" />
-												</Button>
+												{copiedIndex === index ? (
+													<Button variant="ghost" size="icon" className="disabled:opacity-100" disabled>
+														<Check className="text-green-500 w-5 h-5" />
+													</Button>
+												) : (
+													<Button variant="ghost" size="icon" onClick={() => copyToClipboard(url, index)}>
+														<Copy className="w-5 h-5" />
+													</Button>
+												)}
 											</div>
 										</div>
 									))}
