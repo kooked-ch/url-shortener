@@ -47,6 +47,11 @@ export default function ShortForm({ baseUrl, session }: { baseUrl: string; sessi
 			return;
 		}
 
+		if (longUrl.includes(baseUrl)) {
+			setLongUrlError('Cannot shorten this URL');
+			return;
+		}
+
 		const response = await fetch('/api/redirect', {
 			method: 'POST',
 			headers: {
