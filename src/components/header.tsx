@@ -2,7 +2,6 @@
 
 import { getServerSession, Session } from 'next-auth';
 import { Link2 } from 'lucide-react';
-import { Sidebar } from './sidebar';
 
 export async function Header() {
 	const session: Session | null = await getServerSession();
