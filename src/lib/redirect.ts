@@ -103,3 +103,47 @@ export async function getRedirects(email: string): Promise<urlsType[]> {
 
 	return resolvedRedirects;
 }
+
+export async function updateRedirect(id: string, longUrl: string, email: string): Promise<ErrorType> {
+	try {
+		await db.connect();
+
+		const user = await UserModel.findOne({ email });
+
+		if (!user) {
+			return {
+				error: 'User not found',
+				status: 404,
+			};
+		}
+
+		const query: Record<string, any> = { _id: id };
+		if (user.role !== 'admin') {
+			query.user = user._id;
+		}
+
+		const redirect = await RedirectModel.findOne(query);
+
+		if (!redirect) {
+			return {
+				error: 'Redirect not found',
+				status: 404,
+			};
+		}
+
+		redirect.url = longUrl;
+		await redirect.save();
+
+		return {
+			error: '',
+			status: 200,
+		};
+	} catch (error) {
+		console.error('Error updating redirect:', error);
+
+		return {
+			error: 'An internal error occurred',
+			status: 500,
+		};
+	}
+}
