@@ -4,11 +4,17 @@ import { getServerSession } from 'next-auth';
 import { UserModel } from '@/models/User';
 import { cookies } from 'next/headers';
 import db from '@/lib/mongo';
+import rateLimit from '@/lib/rate-limit';
 
 function generateRandomString(length: number): string {
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	return Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
 }
+
+const limiter = rateLimit({
+	interval: 60 * 1000, // 1-minute interval
+	uniqueTokenPerInterval: 500,
+});
 
 export async function POST(req: Request) {
 	try {
@@ -18,12 +24,17 @@ export async function POST(req: Request) {
 			return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
 		}
 
+		const { isRateLimited, headers } = limiter.check(5, 'CREATE_REDIRECT');
+		if (isRateLimited) {
+			return NextResponse.json({ error: 'Please wait a moment before creating another link' }, { status: 429, headers });
+		}
+
 		const session = await getServerSession();
 		const cookieStore = cookies();
 
-		let user = null;
-
 		await db.connect();
+
+		let user = null;
 
 		if (session?.user?.email) {
 			user = await UserModel.findOne({ email: session.user.email });
