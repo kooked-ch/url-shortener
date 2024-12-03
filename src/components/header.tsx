@@ -17,7 +17,7 @@ export async function Header() {
 				{session ? (
 					''
 				) : (
-					<Link href="/auth/signin" className="text-emerald-500 hover:underline">
+					<Link href="/login" className="text-emerald-500 hover:underline">
 						Sign in
 					</Link>
 				)}{' '}
