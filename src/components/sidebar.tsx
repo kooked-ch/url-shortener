@@ -48,7 +48,7 @@ const NavigationMenu = ({ pathname, isCollapsed = false }: { pathname: string; i
 
 export function Sidebar({ session }: { session: Session | null }) {
 	const pathname = usePathname();
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(true);
 
 	useEffect(() => {
 		localStorage.setItem('isOpen', isOpen.toString());
