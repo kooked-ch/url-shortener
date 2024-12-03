@@ -45,7 +45,9 @@ export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: S
 		} else {
 			const { error } = await response.json();
 			if (error === 'Short URL already exists') {
-				setShortUrlError('Short URL already exists');
+				setShortUrlError(error);
+			} else if (error === '') {
+				setLongUrlError(error);
 			}
 		}
 	};
