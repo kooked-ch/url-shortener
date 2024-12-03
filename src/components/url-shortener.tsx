@@ -42,11 +42,13 @@ export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: S
 			setShortenedUrls([...shortenedUrls, `${baseUrl}/${shortUrl}`]);
 			setLongUrl('');
 			setShortUrl('');
+			setLongUrlError('');
+			setShortUrlError('');
 		} else {
 			const { error } = await response.json();
 			if (error === 'Short URL already exists') {
 				setShortUrlError(error);
-			} else if (error === '') {
+			} else if (error) {
 				setLongUrlError(error);
 			}
 		}
