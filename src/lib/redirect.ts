@@ -9,17 +9,6 @@ import { urlsType } from '@/types/url';
 export async function createRedirect(longUrl: string, shortUrl: string, userId: string): Promise<ErrorType> {
 	await db.connect();
 
-	const lastRedirect = await RedirectModel.findOne({
-		user: userId,
-	}).sort({ creationDate: -1 });
-
-	if (lastRedirect && lastRedirect.creationDate.getTime() + 10000 > new Date().getTime()) {
-		return {
-			error: 'Please wait a moment before creating another link',
-			status: 429,
-		};
-	}
-
 	const existing = await RedirectModel.findOne({
 		slug: shortUrl,
 	});
