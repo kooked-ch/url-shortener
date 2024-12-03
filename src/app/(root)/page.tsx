@@ -4,7 +4,6 @@ import { getServerSession } from 'next-auth';
 import { UrlShortener } from '@/components/url-shortener';
 import { Header } from '@/components/header';
 import { Features } from '@/components/features';
-import { Footer } from '@/components/footer';
 
 export default async function MainPage() {
 	const session = await getServerSession();
@@ -15,7 +14,6 @@ export default async function MainPage() {
 			<Header />
 			<UrlShortener baseUrl={new URL(baseUrl).host} session={session} />
 			<Features />
-			<Footer />
 		</div>
 	);
 }
