@@ -75,7 +75,7 @@ export function UrlList({ urls, onDelete, onEdit }: { urls: urlsType[]; onDelete
 	const copyToClipboard = (text: string, index: string) => {
 		setCopiedIndex(index);
 		setTimeout(() => setCopiedIndex(null), 3000);
-		navigator.clipboard.writeText(text);
+		navigator.clipboard.writeText(new URL(window.location.href).host + '/' + text);
 	};
 
 	const handlePageChange = (newPage: number) => {
