@@ -1,7 +1,6 @@
 'use server';
 import { getRedirect } from '@/lib/redirect';
 import { NextResponse, NextRequest } from 'next/server';
-import NotFound from '../not-found';
 
 export async function GET(req: NextRequest) {
 	if (req.url.includes(process.env.NEXTAUTH_URL as string)) {
