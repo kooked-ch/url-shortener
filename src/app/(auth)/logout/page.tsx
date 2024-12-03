@@ -8,8 +8,7 @@ export default function signOutPage() {
 	const router = useRouter();
 
 	const handleSignOut = async () => {
-		await signOut();
-		router.push('/');
+		await signOut({ callbackUrl: '/' });
 	};
 
 	return (
