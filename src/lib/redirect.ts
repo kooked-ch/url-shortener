@@ -50,7 +50,7 @@ export async function createRedirect(longUrl: string, shortUrl: string, userId: 
 		};
 	}
 
-	alertNewRedirect(shortUrl, longUrl, user);
+	alertNewRedirect(shortUrl, longUrl);
 
 	return {
 		error: '',
