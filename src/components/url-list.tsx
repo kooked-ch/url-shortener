@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Copy, ExternalLink, Loader2, Search, ChevronLeft, ChevronRight, Trash2, Edit } from 'lucide-react';
+import { Copy, ExternalLink, Loader2, Search, ChevronLeft, ChevronRight, Trash2, Edit, Check } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { urlsType } from '@/types/url';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,7 @@ export function UrlList({ urls, onDelete, onEdit }: { urls: urlsType[]; onDelete
 	const [itemsPerPage, setItemsPerPage] = useState(10);
 	const [editError, setEditError] = useState('');
 	const [loading, setLoading] = useState(true);
+	const [copiedIndex, setCopiedIndex] = useState<string | null>(null);
 	const [sortConfig, setSortConfig] = useState<{
 		key: keyof (typeof urls)[0];
 		direction: 'asc' | 'desc';
@@ -71,7 +72,9 @@ export function UrlList({ urls, onDelete, onEdit }: { urls: urlsType[]; onDelete
 
 	const totalPages = Math.ceil(filteredUrls.length / itemsPerPage);
 
-	const copyToClipboard = (text: string) => {
+	const copyToClipboard = (text: string, index: string) => {
+		setCopiedIndex(index);
+		setTimeout(() => setCopiedIndex(null), 3000);
 		navigator.clipboard.writeText(text);
 	};
 
@@ -176,9 +179,15 @@ export function UrlList({ urls, onDelete, onEdit }: { urls: urlsType[]; onDelete
 									<TableCell>{formatDistanceToNow(url.creationDate, { addSuffix: true })}</TableCell>
 									<TableCell>{url.hits}</TableCell>
 									<TableCell className="flex gap-2 w-60">
-										<Button variant="ghost" size="icon" className="hover:bg-secondary/50" onClick={() => copyToClipboard(url.shortUrl)}>
-											<Copy className="h-4 w-4" />
-										</Button>
+										{copiedIndex === url.id ? (
+											<Button variant="ghost" size="icon" className="disabled:opacity-100" disabled>
+												<Check className="text-green-500 w-4 h-4" />
+											</Button>
+										) : (
+											<Button variant="ghost" size="icon" className="hover:bg-secondary/50" onClick={() => copyToClipboard(url.shortUrl, url.id)}>
+												<Copy className="w-4 h-4" />
+											</Button>
+										)}
 										<Button variant="ghost" size="icon" className="hover:bg-secondary/50" onClick={() => window.open(url.longUrl, '_blank')}>
 											<ExternalLink className="h-4 w-4" />
 										</Button>
