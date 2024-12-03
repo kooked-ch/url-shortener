@@ -1,6 +1,6 @@
 import { Session } from 'next-auth';
 
-export async function alertNewRedirect(slug: string, url: string, user: Session | null) {
+export async function alertNewRedirect(slug: string, url: string) {
 	const message = `🆕 **New alias Created** 🆕\nA new alias was created\nAlias: ${new URL(process.env.NEXTAUTH_URL || '').host + '/' + slug}\nURL: ${url}`;
 
 	const chatId = process.env.TELEGRAM_CHAT_ID;
