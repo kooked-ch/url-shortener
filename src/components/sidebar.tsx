@@ -1,8 +1,8 @@
 'use client';
-import { Home, List, Menu, X } from 'lucide-react';
+import { Home, List, Menu, X, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 import { Button } from './ui/button';
@@ -28,7 +28,7 @@ const UserAvatar = ({ session }: { session: Session | null }) => (
 		</Avatar>
 		<div>
 			<p className="text-sm font-semibold text-left">{session?.user?.name ?? 'Guest User'}</p>
-			<p className="text-sm text-muted-foreground w-44 truncate text-left">{session?.user?.email ?? ''}</p>
+			<p className="text-sm text-muted-foreground w-32 truncate text-left">{session?.user?.email ?? ''}</p>
 		</div>
 	</div>
 );
@@ -63,7 +63,7 @@ export function Sidebar({ session }: { session: Session | null }) {
 						<Menu className="h-6 w-6" />
 					</Button>
 				</SheetTrigger>
-				<SheetContent side="left" className="w-64 p-0">
+				<SheetContent side="left" className="w-40 p-0">
 					<div className="flex flex-col h-full">
 						<div className="flex-1 px-4 py-6 space-y-4">
 							<div className="flex items-center justify-between mb-6">
@@ -74,6 +74,11 @@ export function Sidebar({ session }: { session: Session | null }) {
 						</div>
 						<div className="p-4 border-t">
 							<UserAvatar session={session} />
+							<Button variant="ghost" size="icon" className="hover:bg-secondary/50" asChild>
+								<Link href="/logout">
+									<LogOut className="h-4 w-4" />
+								</Link>
+							</Button>
 						</div>
 					</div>
 				</SheetContent>
@@ -94,8 +99,13 @@ export function Sidebar({ session }: { session: Session | null }) {
 								</div>
 								<NavigationMenu pathname={pathname} />
 							</div>
-							<div className="p-4 border-t">
+							<div className="p-4 border-t flex justify-between">
 								<UserAvatar session={session} />
+								<Button variant="ghost" size="icon" className="hover:bg-secondary/50" asChild>
+									<Link href="/logout">
+										<LogOut className="h-4 w-4" />
+									</Link>
+								</Button>
 							</div>
 						</div>
 					) : (
