@@ -76,7 +76,7 @@ export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: S
 						<Button onClick={createRedirect} className="w-full bg-primary text-primary-foreground h-12">
 							Shorten URL
 						</Button>
-						{session && shortenedUrls.length > 0 && (
+						{!session && shortenedUrls.length > 0 && (
 							<>
 								<Separator className="my-3" />
 								<div className="mt-6 space-y-3">
@@ -86,11 +86,11 @@ export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: S
 											<div className="flex gap-2">
 												{copiedIndex === index ? (
 													<Button variant="ghost" size="icon" className="disabled:opacity-100" disabled>
-														<Check className="text-green-500 w-5 h-5" />
+														<Check className="text-green-500 w-4 h-4" />
 													</Button>
 												) : (
 													<Button variant="ghost" size="icon" onClick={() => copyToClipboard(url, index)}>
-														<Copy className="w-5 h-5" />
+														<Copy className="w-4 h-4" />
 													</Button>
 												)}
 											</div>
