@@ -6,10 +6,20 @@ import { UserModel } from '@/models/User';
 import { alertNewRedirect } from './telegram';
 import { urlsType } from '@/types/url';
 
-export async function createRedirect(longUrl: string, shortUrl: string, email: string): Promise<ErrorType> {
+export async function createRedirect(longUrl: string, shortUrl: string, userId: string): Promise<ErrorType> {
 	await db.connect();
 
-	// Check if short URL already exists
+	const lastRedirect = await RedirectModel.findOne({
+		user: userId,
+	}).sort({ creationDate: -1 });
+
+	if (lastRedirect && lastRedirect.creationDate.getTime() + 10000 > new Date().getTime()) {
+		return {
+			error: 'Please wait a moment before creating another link',
+			status: 429,
+		};
+	}
+
 	const existing = await RedirectModel.findOne({
 		slug: shortUrl,
 	});
@@ -21,27 +31,16 @@ export async function createRedirect(longUrl: string, shortUrl: string, email: s
 		};
 	}
 
-	const user = await UserModel.findOne({
-		email,
-	});
-
 	let createObject: {
 		slug: string;
 		url: string;
-		user?: string;
+		user: string;
 	} = {
 		slug: shortUrl,
 		url: longUrl,
+		user: userId,
 	};
 
-	if (user) {
-		createObject = {
-			...createObject,
-			user: user._id,
-		};
-	}
-
-	// Create new redirect
 	const redirect = await RedirectModel.create(createObject);
 
 	if (!redirect) {
