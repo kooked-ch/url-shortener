@@ -14,14 +14,14 @@ export async function Header() {
 			</div>
 			<p className="text-xl text-gray-600 max-w-2xl mx-auto">
 				Transform long URLs into short, shareable links.{' '}
-				{session ? (
-					''
-				) : (
-					<Link href="/login" className="text-emerald-500 hover:underline">
-						Sign in
-					</Link>
-				)}{' '}
-				to update your links and access more details.
+				{!session && (
+					<>
+						<Link href="/login" className="text-emerald-500 hover:underline">
+							Sign in
+						</Link>
+						to update your links and access more details.
+					</>
+				)}
 			</p>
 		</header>
 	);
