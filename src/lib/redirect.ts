@@ -101,8 +101,6 @@ export async function getTemporaryUserRedirects(temporaryToken: string | null): 
 
 	await db.connect();
 
-	console.log('Temporary token:', temporaryToken);
-
 	const user = await UserModel.findOne({
 		temporaryToken,
 		verified: false,

@@ -108,7 +108,6 @@ export function UrlList({ urls, onDelete, onEdit }: { urls: urlsType[]; onDelete
 	};
 
 	const handleEdit = () => {
-		console.log(editedLongUrl);
 		if (!editedLongUrl) return setEditError('Please enter a URL');
 		if (!/^(http|https):\/\/[^ "]+$/.test(editedLongUrl)) return setEditError('Please enter a valid URL');
 

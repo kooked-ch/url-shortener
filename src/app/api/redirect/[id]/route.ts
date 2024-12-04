@@ -13,8 +13,6 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 		return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
 	}
 
-	console.log(params.id);
-
 	const session: Session | null = await getServerSession();
 
 	if (!session) {
