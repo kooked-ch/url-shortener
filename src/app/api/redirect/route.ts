@@ -45,7 +45,7 @@ export async function POST(req: Request) {
 			if (temporaryToken) {
 				user = await UserModel.findOne({ temporaryToken });
 			} else {
-				const token = generateRandomString(256);
+				const token = generateRandomString(1024);
 				user = await UserModel.create({
 					email: null,
 					username: null,
