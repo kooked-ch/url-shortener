@@ -114,7 +114,7 @@ export async function getTemporaryUserRedirects(temporaryToken: string | null): 
 
 	const redirects = await RedirectModel.find({ user: user._id });
 
-	return redirects.map((redirect: IRedirect) => redirect.slug);
+	return redirects.map((redirect: IRedirect) => new URL(process.env.NEXTAUTH_URL || '').host + '/' + redirect.slug);
 }
 
 export async function updateRedirect(id: string, longUrl: string, email: string): Promise<ErrorType> {
