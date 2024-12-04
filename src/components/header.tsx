@@ -17,7 +17,7 @@ export async function Header() {
 				{!session && (
 					<>
 						<Link href="/login" className="text-emerald-500 hover:underline">
-							Sign in
+							Sign in{' '}
 						</Link>
 						to update your links and access more details.
 					</>
