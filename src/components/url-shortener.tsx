@@ -8,10 +8,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Session } from 'next-auth';
 import { Separator } from '@/components/ui/separator';
 
-export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: Session | null }) {
+export function UrlShortener({ baseUrl, baseUrls }: { baseUrl: string; baseUrls: string[] }) {
 	const [longUrl, setLongUrl] = useState<string>('');
 	const [shortUrl, setShortUrl] = useState<string>('');
-	const [shortenedUrls, setShortenedUrls] = useState<string[]>([]);
+	const [shortenedUrls, setShortenedUrls] = useState<string[]>(baseUrls);
 	const [longUrlError, setLongUrlError] = useState<string>('');
 	const [shortUrlError, setShortUrlError] = useState<string>('');
 	const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
@@ -80,7 +80,7 @@ export function UrlShortener({ baseUrl, session }: { baseUrl: string; session: S
 						<Button onClick={createRedirect} className="w-full bg-primary text-primary-foreground h-12">
 							Shorten URL
 						</Button>
-						{!session && shortenedUrls.length > 0 && (
+						{baseUrls && shortenedUrls.length > 0 && (
 							<>
 								<Separator className="my-3" />
 								<div className="mt-6 space-y-3">

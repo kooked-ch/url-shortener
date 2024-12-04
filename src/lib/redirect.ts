@@ -94,6 +94,29 @@ export async function getRedirects(email: string): Promise<urlsType[]> {
 	return resolvedRedirects;
 }
 
+export async function getTemporaryUserRedirects(temporaryToken: string | null): Promise<string[]> {
+	if (!temporaryToken) {
+		return [];
+	}
+
+	await db.connect();
+
+	console.log('Temporary token:', temporaryToken);
+
+	const user = await UserModel.findOne({
+		temporaryToken,
+		verified: false,
+	});
+
+	if (!user) {
+		return [];
+	}
+
+	const redirects = await RedirectModel.find({ user: user._id });
+
+	return redirects.map((redirect: IRedirect) => redirect.slug);
+}
+
 export async function updateRedirect(id: string, longUrl: string, email: string): Promise<ErrorType> {
 	try {
 		await db.connect();
