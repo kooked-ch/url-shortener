@@ -72,7 +72,7 @@ export function Sidebar({ session }: { session: Session | null }) {
 							</div>
 							<NavigationMenu pathname={pathname} />
 						</div>
-						<div className="p-4 border-t">
+						<div className="p-4 border-t flex justify-between">
 							<UserAvatar session={session} />
 							<Button variant="ghost" size="icon" className="hover:bg-secondary/50" asChild>
 								<Link href="/logout">
