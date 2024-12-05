@@ -63,7 +63,7 @@ export function Sidebar({ session }: { session: Session | null }) {
 						<Menu className="h-6 w-6" />
 					</Button>
 				</SheetTrigger>
-				<SheetContent side="left" className="w-40 p-0">
+				<SheetContent side="left" className="w-64 p-0">
 					<div className="flex flex-col h-full">
 						<div className="flex-1 px-4 py-6 space-y-4">
 							<div className="flex items-center justify-between mb-6">
