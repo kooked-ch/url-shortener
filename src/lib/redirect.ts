@@ -55,6 +55,10 @@ export async function getRedirect(slug: string): Promise<string | null> {
 			slug,
 		});
 
+		if (!redirect) {
+			return null;
+		}
+
 		await LogModel.create({
 			url: redirect._id.toString(),
 		});
