@@ -46,6 +46,10 @@ export function UrlList({ urls, onDelete, onEdit }: { urls: urlsType[]; onDelete
 		return () => window.removeEventListener('resize', calculateItemsPerPage);
 	}, []);
 
+	useEffect(() => {
+		router.refresh();
+	}, []);
+
 	const handleSort = (key: keyof (typeof urls)[0]) => {
 		setSortConfig((current) => ({
 			key,
