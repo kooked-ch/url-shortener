@@ -25,6 +25,7 @@ export default function RootLayout(props: RootLayoutProps) {
 				<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 				<meta name="apple-mobile-web-app-title" content="MyWebSite" />
 				<link rel="manifest" href="/site.webmanifest" />
+				<script defer data-domain="go.kooked.app" src="https://plausible.io/js/script.js"></script>
 			</head>
 			<body className={inter.className}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
