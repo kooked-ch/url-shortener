@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { ThemeProvider } from 'next-themes';
-
 import React from 'react';
 import Script from 'next/script';
+import packageJson from '../../package.json' assert { type: 'json' };
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 type RootLayoutProps = any;
 
 export default function RootLayout(props: RootLayoutProps) {
-	const { children, session } = props;
+	const { children } = props;
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
@@ -28,10 +28,11 @@ export default function RootLayout(props: RootLayoutProps) {
 				<link rel="manifest" href="/site.webmanifest" />
 			</head>
 			<body className={inter.className}>
+				<p className="hidden">Version {packageJson.version}</p>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 					{children}
 				</ThemeProvider>
-				<Script defer data-domain="go.kooked.app" src="https://plausible.io/js/script.js" />
+				<Script defer data-domain="go.kooked.app" src="https://plausible.io/js/script.js" strategy="afterInteractive" />
 			</body>
 		</html>
 	);
