@@ -64,9 +64,7 @@ export async function POST(req: Request) {
 			return NextResponse.json({ error: 'User not found or could not be created' }, { status: 404 });
 		}
 
-		const slug = encodeURIComponent(shortUrl);
-
-		const redirect = await createRedirect(longUrl, slug, user._id);
+		const redirect = await createRedirect(longUrl, shortUrl, user._id);
 		if (redirect.error) {
 			return NextResponse.json({ error: redirect.error }, { status: redirect.status });
 		}
