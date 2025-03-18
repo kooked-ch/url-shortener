@@ -9,8 +9,10 @@ import { urlsType } from '@/types/url';
 export async function createRedirect(longUrl: string, shortUrl: string, userId: string): Promise<ErrorType> {
 	await db.connect();
 
+	const slug = encodeURIComponent(shortUrl);
+
 	const existing = await RedirectModel.findOne({
-		slug: shortUrl,
+		slug,
 	});
 
 	if (existing) {
@@ -24,11 +26,16 @@ export async function createRedirect(longUrl: string, shortUrl: string, userId: 
 		slug: string;
 		url: string;
 		user: string;
+		display?: string;
 	} = {
-		slug: shortUrl,
+		slug: slug,
 		url: longUrl,
 		user: userId,
 	};
+
+	if (shortUrl !== slug) {
+		createObject.display = shortUrl;
+	}
 
 	const redirect = await RedirectModel.create(createObject);
 
@@ -116,7 +123,7 @@ export async function getTemporaryUserRedirects(temporaryToken: string | null): 
 
 	const redirects = await RedirectModel.find({ user: user._id });
 
-	return redirects.map((redirect: IRedirect) => new URL(process.env.NEXTAUTH_URL || '').host + '/' + redirect.slug);
+	return redirects.map((redirect: IRedirect) => new URL(process.env.NEXTAUTH_URL || '').host + '/' + (redirect.display ? redirect.display : redirect.slug));
 }
 
 export async function updateRedirect(id: string, longUrl: string, email: string): Promise<ErrorType> {
