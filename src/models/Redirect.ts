@@ -7,6 +7,7 @@ export interface IRedirect extends Document {
 	slug: string;
 	url: string;
 	user?: string;
+	display?: string;
 }
 
 const redirectsSchema = new mongoose.Schema<IRedirect>({
@@ -15,6 +16,7 @@ const redirectsSchema = new mongoose.Schema<IRedirect>({
 	slug: { type: String, required: true },
 	url: { type: String, required: true },
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+	display: { type: String },
 });
 
 redirectsSchema.pre('save', function (next) {

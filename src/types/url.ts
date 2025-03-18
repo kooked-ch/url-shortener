@@ -4,4 +4,5 @@ export interface urlsType {
 	shortUrl: string;
 	creationDate: Date;
 	hits: number;
+	display?: string;
 }
