@@ -98,6 +98,7 @@ export async function getRedirects(email: string): Promise<urlsType[]> {
 			longUrl: redirect.url,
 			shortUrl: redirect.slug,
 			creationDate: redirect.creationDate,
+			display: redirect?.display,
 			hits: await LogModel.countDocuments({ url: redirect._id.toString() }),
 		}))
 	);
