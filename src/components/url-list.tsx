@@ -63,6 +63,7 @@ export function UrlList({ urls, onDelete, onEdit }: { urls: urlsType[]; onDelete
 		const aValue = a[sortConfig.key];
 		const bValue = b[sortConfig.key];
 
+		if (aValue === undefined || bValue === undefined) return 0;
 		if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
 		if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
 		return 0;
@@ -177,7 +178,7 @@ export function UrlList({ urls, onDelete, onEdit }: { urls: urlsType[]; onDelete
 						<TableBody>
 							{currentUrls.map((url) => (
 								<TableRow key={url.id}>
-									<TableCell className="font-medium">{url.shortUrl}</TableCell>
+									<TableCell className="font-medium">{url.display ? url.display : url.shortUrl}</TableCell>
 									<TableCell className="max-w-md truncate">{url.longUrl}</TableCell>
 									<TableCell>{formatDistanceToNow(url.creationDate, { addSuffix: true })}</TableCell>
 									<TableCell>{url.hits}</TableCell>
